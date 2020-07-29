@@ -1,9 +1,10 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setCurrentUser } from './redux/user/user.actions'
 
 import './App.css';
+
 import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
@@ -48,7 +49,9 @@ class App extends React.Component {
         <Switch>
           <Route exact path='/' component={HomePage} />
           <Route path='/shop' component={ShopPage} />
-          <Route path='/signin' component={SignInAndSignUpPage} />
+          <Route 
+            exact path='/signin' 
+            render={ () => this.props.currentUser ? (<Redirect to='/' />) : (<SignInAndSignUpPage />) } />
         </Switch>
       </div>
     );
@@ -56,10 +59,15 @@ class App extends React.Component {
 
 }
 
+// get currentUser from redux store and put it in props
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
+});
+
 // dispatch action to set currentUser via the action which sets the payload
 const mapDispatchToProps = dispatch => ({
   setCurrentUser: user => dispatch( setCurrentUser(user) )
 });
 
-// null because we dont need any state to props from our reducer
-export default connect(null, mapDispatchToProps)(App);
+// pass user to props (1st arg), set action to props (for setting state in the redux store) 2nd arg
+export default connect(mapStateToProps, mapDispatchToProps)(App);
