@@ -2,9 +2,12 @@ import React from 'react';
 import { auth } from '../../firebase/firebase.utils';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import { ReactComponent as Logo } from '../../assets/crown.svg';
 import CartIcon from '../cart-icon/cart-icon.component';
 import CartDropdown from '../cart-dropdown/cart-dropdown.component';
+import { selectCartHidden } from '../../redux/cart/cart.selectors';
+import { selectCurrentUser } from '../../redux/user/user.selectors';
 import './header.styles.scss';
 
 const Header = ({ currentUser, hidden }) => (
@@ -34,10 +37,13 @@ const Header = ({ currentUser, hidden }) => (
   </div>
 );
 
-// Grab the nested values with nested destructuring
-const mapStateToProps = ( { user: { currentUser }, cart: { hidden } } ) => ({
-  currentUser,
-  hidden
-})
+/*  
+createStructuredSelector is a shortcut to not have to use createSelector
+all over the place, insted the values of the returned object props should
+just be the selctor funtions themselves */
+const mapStateToProps = ( state ) => createStructuredSelector({
+  currentUser: selectCurrentUser,
+  hidden: selectCartHidden
+});
 
 export default connect(mapStateToProps)(Header);

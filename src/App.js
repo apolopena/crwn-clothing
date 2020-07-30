@@ -10,7 +10,8 @@ import ShopPage from './pages/shop/shop.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 import Header from './components/header/header.component';
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
-
+import { selectCurrentUser } from './redux/user/user.selectors';
+import { createStructuredSelector } from 'reselect';
 
 class App extends React.Component {
 
@@ -60,8 +61,8 @@ class App extends React.Component {
 }
 
 // get currentUser from redux store and put it in props
-const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser
+const mapStateToProps = (state) => createStructuredSelector({
+  currentUser: selectCurrentUser
 });
 
 // dispatch action to set currentUser via the action which sets the payload
