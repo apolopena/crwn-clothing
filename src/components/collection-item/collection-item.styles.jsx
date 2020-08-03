@@ -25,7 +25,7 @@ export const AddButton = styled(CustomButton)`
   width: 80%;
   opacity: 0.7;
   position: absolute;
-  top: 255px;
+  top: 225px;
   display: none;
 `;
 
@@ -44,6 +44,7 @@ export const CollectionFooterContainer = styled.div`
   display: flex;
   justify-content: space-between;
   font-size: 18px;
+  margin-bottom: 30px;
 `;
 
 export const NameContainer = styled.span`
