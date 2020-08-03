@@ -16,6 +16,8 @@ import Header from './components/header/header.component';
 
 import './App.css';
 
+import { NoMatchPage } from './pages/404/';
+
 class App extends React.Component {
 
   unsubscribeFromAuth = null;
@@ -57,6 +59,7 @@ class App extends React.Component {
           <Route 
             exact path='/signin' 
             render={ () => this.props.currentUser ? (<Redirect to='/' />) : (<SignInAndSignUpPage />) } />
+          <Route component={NoMatchPage} />
         </Switch>
       </div>
     );
