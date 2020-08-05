@@ -69,7 +69,7 @@ class App extends React.Component {
 
 // get currentUser from redux store and put it in props
 const mapStateToProps = (state) => createStructuredSelector({
-  currentUser: selectCurrentUser
+  currentUser: selectCurrentUser,
 });
 
 // dispatch action to set currentUser via the action which sets the payload
