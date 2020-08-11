@@ -1,11 +1,10 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import { connect } from 'react-redux';
 
 import { createStructuredSelector } from 'reselect';
-import { setCurrentUser } from './redux/user/user.actions';
 import { selectCurrentUser } from './redux/user/user.selectors';
+import { checkUserSession } from './redux/user/user.actions';
 
 import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component';
@@ -24,24 +23,8 @@ class App extends React.Component {
 
 
   componentDidMount() {
-    const { setCurrentUser } = this.props;
-    this.unsubscribeFromAuth = auth.onAuthStateChanged( async userAuth => {
-      // if user is authenticated...
-      if (userAuth) {
-        // ...check if db for user data, and set it into state object.
-        const userRef = await createUserProfileDocument(userAuth);
-
-        userRef.onSnapshot(snapShot => {
-          setCurrentUser({
-            id: snapShot.id,
-            ...snapShot.data()
-          });
-        });
-
-      } else { // ...otherwise set user to empty/null
-        setCurrentUser(userAuth);
-      }
-    });
+    const { checkUserSession } = this.props;
+    checkUserSession();
   }
 
   componentWillUnmount() {
@@ -67,14 +50,13 @@ class App extends React.Component {
 
 }
 
+const mapDispatchToProps = dispatch => ({
+  checkUserSession: () => dispatch(checkUserSession())
+})
+
 // get currentUser from redux store and put it in props
 const mapStateToProps = (state) => createStructuredSelector({
   currentUser: selectCurrentUser,
-});
-
-// dispatch action to set currentUser via the action which sets the payload
-const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch( setCurrentUser(user) )
 });
 
 // pass user to props (1st arg), set action to props (for setting state in the redux store) 2nd arg
